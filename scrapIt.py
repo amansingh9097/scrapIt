@@ -15,7 +15,7 @@ records = []
 for result in results:
     records.append(result.text)
 
-""" when there's pagination """
+""" whenever there's pagination, use the below code block """
 # for page in range(2, 48):
 #     time.sleep(2)
 #     url = 'THE-URL/{}/'.format(page)
