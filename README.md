@@ -1,1 +1,1 @@
-# web-scrapper
+# some handy scrapping scripts
