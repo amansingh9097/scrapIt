@@ -180,7 +180,13 @@ for n in range(1, total_pages + 1):
         data.loc[idx, 'locations'] = ';'.join(locations)
         data.loc[idx, 'sectors'] = ';'.join(sectors)
 
+        if idx == 0:
+            data.to_csv(cfg['save_as']['file_name'], index=False, mode='w') # write to csv with column names
+        else:
+            data.to_csv(cfg['save_as']['file_name'], header=False, index=False, mode='a') # append to csv without column names
+
+        browser.implicitly_wait(10)  # seconds
+        print('search result ' + str(idx+1) + 'done.')
+
         idx = idx + 1
-        browser.implicitly_wait(10) # seconds
-    time.sleep(20) # seconds
-data.to_csv('assortis.csv', index=False)
+    time.sleep(10)  # seconds
