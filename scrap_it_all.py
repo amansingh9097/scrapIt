@@ -109,25 +109,27 @@ for n in range(1, total_pages + 1):
         contract_name = row_content.find('h4').get_text().strip()  # Contract-name
 
         contracted_companies_lst = []
-        for item in soup.find_all('td', attrs={'class': 'title_list'}):
-            contracted_companies_lst.append(item.text.strip())  # Contracted-companies
+        for item in row_content.find_all('td', attrs={"class": "title_list"}):
+            if item:
+                contracted_companies_lst.append(item.get_text().strip('\n\t'))  # Contracted-companies
 
         awarded_to = []
         consortium_companies = []
         for each in contracted_companies_lst:
-            if 'in association with' in each: # check for awardees
-                awarded_to.append(' '.join(each.split()[:-3]))  # awarded to
+            if 'in association with' in each:  # check for awardee
+                awarded_to.append(' '.join(each.split()[:-3]))  # append to awarded_to removing last 3 words
+            elif 'and' in each.split()[-1]:
+                consortium_companies.append(' '.join(each.split()[:-1]))  # append to consortium-companies removing last word
             else:
-                if 'and' in each.split()[-1]:
-                    consortium_companies.append(' '.join(each.split()[:-1]))  # consortium-companies
+                consortium_companies.append(' '.join(each.split()))  # append to consortium-companies as it is
 
         amount_lst = []
         currency_lst = []
         for item in soup.find_all('td', attrs={'class': 'budget2'}):
-            if item.text.strip().replace('\xa0',''):
-                amount_lst.append(item.text.strip().replace('\xa0','')[:-3])  # Amount
+            if item.text.strip().replace('\xa0', ''):
+                amount_lst.append(item.text.strip().replace('\xa0', '')[:-3])  # Amount
                 if len(currency_lst) < 1:
-                    currency_lst.append(item.text.strip().replace('\xa0','')[-3:])  # Currency
+                    currency_lst.append(item.text.strip().replace('\xa0', '')[-3:])  # Currency
 
         published_date = []
         column_history_active_content = soup.find("div", attrs={"class": "column history active"})
@@ -139,7 +141,7 @@ for n in range(1, total_pages + 1):
             items = soup.find("div", attrs={"class": "drawer active"}).find_all("p")
             for item in items:
                 if 'Published' in item.text:
-                    date_str = item.findNext("p").text.replace('\xa0',' ')
+                    date_str = item.findNext("p").text.replace('\xa0', ' ')
                     published_date.append(datetime.strptime(date_str, '%d %B %Y').strftime('%d-%m-%Y'))
         else:
             for item in items:
@@ -189,4 +191,4 @@ for n in range(1, total_pages + 1):
         print('search result ' + str(idx+1) + 'done.')
 
         idx = idx + 1
-    time.sleep(10)  # seconds
+    time.sleep(10)  # wait-time in seconds
