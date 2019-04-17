@@ -82,7 +82,7 @@ time.sleep(10)  # wait time
 idx = 0
 for n in range(1, total_pages + 1):
     url = pagination_url_txt + str(n)
-    print('...scrapping results on page:', str(n))
+    print('\n...scrapping results on page:', str(n))
     browser.get(url)
 
     results_on_page = []
@@ -183,12 +183,12 @@ for n in range(1, total_pages + 1):
         data.loc[idx, 'sectors'] = ';'.join(sectors)
 
         if idx == 0:
-            data.to_csv(cfg['save_as']['file_name'], index=False, mode='w') # write to csv with column names
+            data.to_csv(cfg['save_as']['file_name'], index=False, mode='w')  # write to csv with column names
         else:
-            data.to_csv(cfg['save_as']['file_name'], header=False, index=False, mode='a') # append to csv without column names
+            data.to_csv(cfg['save_as']['file_name'], header=False, index=False, mode='a')  # append to csv without column names
 
         browser.implicitly_wait(10)  # seconds
-        print('search result ' + str(idx+1) + 'done.')
+        print(str(idx+1), '\t', end='')
 
         idx = idx + 1
     time.sleep(10)  # wait-time in seconds
